@@ -1,21 +1,22 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-
-import Exercise25_01.BinaryTree.TreeNode;
 
 public class Exercise25_03 {
   public static void main(String[] args) {
-    BST<Integer> usertree = new BST<Integer>();
+    BST<Integer> inttree = new BST<Integer>();
     
     Scanner input = new Scanner(System.in);
     
     // Prompt the user to enter 10 integers and store them in the tree
     System.out.print("Enter 10 numbers: ");
     for (int i = 0; i < 10; i++) {
-      usertree.insert(input.nextInt());
+      inttree.insert(input.nextInt());
     }
    
-    usertree.inorder();
-    usertree.nonRecursiveInorder();
+    inttree.inorder();
+    inttree.nonRecursiveInorder();
     
     BST<String> tree = new BST<String>();
     tree.insert("George");
@@ -296,40 +297,34 @@ public class Exercise25_03 {
 
     /** Inorder traversal from the root */
     public void nonRecursiveInorder() {
-    java.util.LinkedList<TreeNode<E>> queue = new java.util.LinkedList<TreeNode<E>>();
-    while (queue.size() < 10) {
-      TreeNode<E> current = root;
-      while (current.left != null && !queue.contains(current.left)) {
-    	  current = current.left;
+      Queue<TreeNode<E>> inOrderQueue = new LinkedList<TreeNode<E>>();
+      TreeNode last = null;
+      TreeNode top = root;
+      TreeNode current = root;
+      TreeNode parent = null;
+      while (current.right != null) {
+    	  current = current.right;
+    	  last = current;
       }
-      if (current.left != null && !queue.contains(current.left)) {
-    	queue.add(current.left);  
-      }
-      else if (current.left != null && queue.contains(current.left)) {
-    	  queue.add(current);
-      }
-      else if (queue.contains(current) && !queue.contains(current.right)) {
-    	  while (current.right.left != null && !queue.contains(current.right.left)) {
-    		  current = current.right.left;
+      current = root;
+      while (!inOrderQueue.contains(last)) {
+    	  if ((current.left != null) && !inOrderQueue.contains(current.left)) {
+    		  parent = current;
+    		  current = current.left;
     	  }
-    	  if (current.left != null && !queue.contains(current.left)) {
-    	    	queue.add(current.left);  
-    	      }
-    	  else if (current.left != null && queue.contains(current.left)) {
-    	  	  queue.add(current);
-          }
-    	  else if (current.right != null && !queue.contains(current.right)) {
-    		  queue.add(current.right);
-    	  } 
+    	  else if (!inOrderQueue.contains(current)){
+    		  inOrderQueue.add(current);
+    		  System.out.print(current.element + " ");
+    	  }
+    	  else if ((current.right != null) && !inOrderQueue.contains(current.right)) {
+    		  parent = current;
+    		  current = current.right;
+    	  }
+    	  else {
+    		  current = top;
+    	  }
       }
-      else if (!queue.contains(current.right)) {
-    	  queue.add(current.right);
-      }
     }
-    for (int i = 0; i < 10; i++) {
-    	System.out.print(queue.element() + " ");
-    	queue.remove();
-    }
-    }
+    
   }
 }
